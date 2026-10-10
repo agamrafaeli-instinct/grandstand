@@ -90,7 +90,7 @@ function views(){
 function render(){
  const v=views();
  const nmEl=document.getElementById('nm');nmEl.innerHTML=v.need.length?`<a class="nm wait" href="#need">${v.need.length} WAITING</a>`:`<span class="nm clear" title="All clear: nothing needs you" aria-label="All clear"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/></svg></span>`;nmEl.firstChild.onclick=e=>{if(v.need.length){e.preventDefault();tab='need';location.hash='need';render();window.scrollTo(0,0)}};
- document.getElementById('tabs').innerHTML=TABS.filter(t=>t[0]!=='need'||v.need.length).map(([k,n])=>{const c=k==='pipe'?D.items.length:k==='sprint'?v.dev.length+v.ready.length:(v[k]||[]).length;return`<button role="tab" aria-selected="${k===tab}" data-t="${k}">${n}<i>${c}</i></button>`}).join('');
+ document.getElementById('tabs').innerHTML=TABS.filter(t=>t[0]==='need'?v.need.length:t[0]==='epics'?v.epics.length:true).map(([k,n])=>{const c=k==='pipe'?D.items.length:k==='sprint'?v.dev.length+v.ready.length:(v[k]||[]).length;return`<button role="tab" aria-selected="${k===tab}" data-t="${k}">${n}<i>${c}</i></button>`}).join('');
  let h='';
  if(tab==='need')h=list(v.need,'Nothing is waiting on you.');
  else if(tab==='sprint'){const g=(n,a,cap)=>`<div class="grp"><span>${n}</span><span>${a.length}</span></div>`+(cap?`<div class="cap">${cap}</div>`:'');
