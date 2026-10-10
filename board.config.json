@@ -1,0 +1,13 @@
+{
+  "title": "HN explorer board",
+  "owner": "agamrafaeli-instinct",
+  "ownerType": "user",
+  "project": 1,
+  "statusField": "Status",
+  "groupField": "Horizon",
+  "groupOrder": ["Now", "Next", "Later"],
+  "epicLabel": "epic",
+  "hideStatuses": ["Done"],
+  "needsMe": ["Needs decision", "QA"],
+  "building": ["Ready", "Dev"]
+}
