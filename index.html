@@ -65,9 +65,9 @@ footer a{color:inherit}
 <footer id="foot"></footer><footer style="padding-top:0">Made with <a href="https://github.com/agamrafaeli-instinct/grandstand">Grandstand</a>: watch your coding agent work</footer>
 <script>
 let LD=sessionStorage.getItem('ld')==='1';
-const TABS=[['sprint','Sprint'],['epics','Epics'],['pipe','Pipeline'],['need','Needs me']];
+const TABS=[['huddles','Huddles'],['sprint','Sprint'],['epics','Epics'],['pipe','Pipeline'],['need','Needs me']];
 let ORDER=[];
-let NEED=[],BUILD=[],GROUPS=[],D=null,tab=(location.hash||'#sprint').slice(1);if(!TABS.some(t=>t[0]===tab))tab='sprint';
+let EH={},HUD=[],NEED=[],BUILD=[],GROUPS=[],D=null,tab=(location.hash||'#sprint').slice(1);if(!TABS.some(t=>t[0]===tab))tab='sprint';
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const clean=t=>t.replace(/^\[Epic\]\s*-\s*/,'');
 function split(t){const c=clean(t),p=c.split(' - ');return p.length>1&&/^\[Epic\]/.test(t)?[p[0],p.slice(1).join(' - ')]:[c,''];}
@@ -75,6 +75,7 @@ function ago(iso){const s=(Date.now()-new Date(iso))/1000;if(s<90)return'just no
 const slug=x=>x==='Needs decision'?'need':String(x||'').toLowerCase().replace(/[^a-z]/g,'');
 function item(i){const[a,b]=split(i.title);const epic=i.epic;
  const chips=[`<span class="chip k-${slug(i.status)}">${esc(i.status||'No status')}</span>`];
+ const hh=i.huddle||EH[i.parent];if(hh&&tab!=='huddles')chips.push(`<span class="chip">${esc(hh)}</span>`);
  if(i.group)chips.push(`<span class="chip ${i.group.toLowerCase()}">${esc(i.group)}</span>`);
  if(!epic&&i.estimate)chips.push(`<span class="chip est">${i.estimate<1?Math.round(i.estimate*60)+' min':'~'+i.estimate+' h'}</span>`);
  if(epic&&i.total)chips.push(`<span class="chip prog">${i.done}/${i.total} done</span>`);
@@ -88,13 +89,17 @@ function views(){
  const need=by(i=>NEED.includes(i.status));
  const build=by(i=>BUILD.includes(i.status)&&!i.epic);const dev=build.filter(i=>i.status==='Dev'),ready=build.filter(i=>i.status!=='Dev');const now=by(i=>i.epic&&i.group==='Now');
  const epics=by(i=>i.epic).sort((a,b)=>gi(a.group)-gi(b.group)||a.number-b.number);
- return{need,build,dev,ready,now,epics};}
+ const hud=HUD.length&&epics.some(e=>e.huddle)?1:0;return{need,build,dev,ready,now,epics,hud};}
 function render(){
  const v=views();
  const nmEl=document.getElementById('nm');nmEl.innerHTML=v.need.length?`<a class="nm wait" href="#need">${v.need.length} WAITING</a>`:`<span class="nm clear" title="All clear: nothing needs you" aria-label="All clear"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/></svg></span>`;nmEl.firstChild.onclick=e=>{if(v.need.length){e.preventDefault();tab='need';location.hash='need';render();window.scrollTo(0,0)}};
- document.getElementById('tabs').innerHTML=TABS.filter(t=>t[0]==='need'?v.need.length:t[0]==='epics'?v.epics.length:true).map(([k,n])=>{const c=k==='pipe'?D.items.length:k==='sprint'?v.dev.length+v.ready.length:(v[k]||[]).length;return`<button role="tab" aria-selected="${k===tab}" data-t="${k}">${n}<i>${c}</i></button>`}).join('');
+ document.getElementById('tabs').innerHTML=TABS.filter(t=>t[0]==='need'?v.need.length:t[0]==='epics'?v.epics.length:t[0]==='huddles'?v.hud:true).map(([k,n])=>{const c=k==='huddles'?HUD.length:k==='pipe'?D.items.length:k==='sprint'?v.dev.length+v.ready.length:(v[k]||[]).length;return`<button role="tab" aria-selected="${k===tab}" data-t="${k}">${n}<i>${c}</i></button>`}).join('');
  let h='';
- if(tab==='need')h=list(v.need,'Nothing is waiting on you.');
+if(tab==='huddles'){const names=HUD.concat(['No huddle']);names.forEach((n,ix)=>{const es=v.epics.filter(e=>(e.huddle||'No huddle')===n);if(!es.length&&n==='No huddle')return;
+  h+=`<div class="grp"><span>${ix<HUD.length?(ix+1)+'. ':''}${esc(n)}</span><span>${es.length} epic${es.length===1?'':'s'}</span></div>`;
+  if(!es.length)h+='<div class="empty">No epics in this huddle yet.</div>';
+  es.forEach(e=>{h+=item(e);const mv=D.items.filter(i=>i.parent===e.number&&i.status==='Dev');mv.forEach(m=>{h+=`<a class="item st-dev" href="${esc(m.url)}"><div class="row"><div><div class="s">Moving now</div><div class="t">${esc(m.title)}</div></div><div class="num">#${m.number}</div></div></a>`})})});}
+ else if(tab==='need')h=list(v.need,'Nothing is waiting on you.');
  else if(tab==='sprint'){const g=(n,a,cap)=>`<div class="grp"><span>${n}</span><span>${a.length}</span></div>`+(cap?`<div class="cap">${cap}</div>`:'');
   h=(D.recent_done&&D.recent_done.length?`<details class="ld"${LD?' open':''}><summary class="grp"><span>Last done</span><span>${D.recent_done.length}</span></summary>`+D.recent_done.map(x=>`<a class="item" href="${esc(x.url)}"><div class="row"><div><div class="t">${esc(x.title)}</div><div class="s">${new Date(x.closed).toLocaleString([], {month:'short',day:'numeric',hour:'numeric',minute:'2-digit'})} (${ago(x.closed)})</div></div><div class="num">#${x.number}</div></div></a>`).join('')+'</details>':'')+g('In flight',v.dev)+list(v.dev,'Nothing in Dev right now.')+g('Up next',v.ready,'Taken top to bottom: the first one is next.')+list(v.ready,'Nothing groomed and ready.');
   if(v.need.length)h+=g('Waiting on review',v.need,'')+v.need.map(item).join('');
@@ -104,7 +109,7 @@ function render(){
  document.getElementById('main').innerHTML=h;
  const ld=document.querySelector('details.ld');if(ld)ld.ontoggle=()=>{LD=ld.open;sessionStorage.setItem('ld',LD?'1':'0')};
  document.querySelectorAll('#tabs button').forEach(b=>b.onclick=()=>{tab=b.dataset.t;location.hash=tab;render();window.scrollTo(0,0)});}
-fetch('data/board.json',{cache:'no-cache'}).then(r=>r.json()).then(d=>{D=d;NEED=d.needs_me||[];BUILD=d.building||[];GROUPS=d.group_order||[];ORDER=(d.statuses||[]).filter(s=>d.counts[s]);document.title=d.title;document.querySelector('h1').textContent=d.title;
+fetch('data/board.json',{cache:'no-cache'}).then(r=>r.json()).then(d=>{D=d;NEED=d.needs_me||[];BUILD=d.building||[];GROUPS=d.group_order||[];HUD=d.huddles||[];d.items.forEach(i=>{if(i.epic&&i.huddle)EH[i.number]=i.huddle});ORDER=(d.statuses||[]).filter(s=>d.counts[s]);document.title=d.title;document.querySelector('h1').textContent=d.title;
  document.getElementById('gen').textContent='Updated '+ago(d.generated)+' · refreshes every 5 min and on every board change';
  if(d.working)document.getElementById('gen').insertAdjacentHTML('afterend',`<div class="sub" id="wn"><b style="color:#2da44e">&#9679; WORKING NOW</b> · <a href="${esc(d.working.url)}">${esc(d.working.name)}</a> ${d.working.started?'started '+ago(d.working.started):'in Dev'}</div>`);
  const c=d.counts||{};const sum=a=>a.reduce((t,k)=>t+(c[k]||0),0);const rest=ORDER.filter(s=>!NEED.includes(s)&&!BUILD.includes(s)).slice(-2).reverse();

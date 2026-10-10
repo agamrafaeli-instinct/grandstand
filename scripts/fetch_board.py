@@ -13,16 +13,26 @@ OWNER = cfg['owner']; NUM = int(cfg['project']); KIND = 'organization' if cfg.ge
 SF = cfg.get('statusField', 'Status'); GF = cfg.get('groupField'); EL = cfg.get('epicLabel', 'epic')
 EF = cfg.get('estimateField')
 HIDE = set(cfg.get('hideStatuses', ['Done']))
+HFN = cfg.get('huddleField', 'Huddle')
+def probe():
+    q = '{%s(login:"%s"){projectV2(number:%d){fields(first:60){nodes{... on ProjectV2FieldCommon{name}}}}}}' % (KIND, OWNER, NUM)
+    r = subprocess.run(['gh', 'api', 'graphql', '-f', 'query=' + q], capture_output=True, text=True, env=dict(os.environ, GH_TOKEN=os.environ.get('BOARD_TOKEN') or os.environ.get('GH_TOKEN', '')))
+    try: return [f['name'] for f in json.loads(r.stdout)['data'][KIND]['projectV2']['fields']['nodes'] if f]
+    except Exception: return []
+HAS_H = HFN in probe()
 est = ('es:fieldValueByName(name:"%s"){... on ProjectV2ItemFieldNumberValue{number}}' % EF) if EF else ''
+hud = ('hd:fieldValueByName(name:"%s"){... on ProjectV2ItemFieldSingleSelectValue{name}}' % HFN) if HAS_H else ''
+hopt = (' hf:field(name:"%s"){... on ProjectV2SingleSelectField{options{name}}}' % HFN) if HAS_H else ''
 grp = ('gr:fieldValueByName(name:"%s"){... on ProjectV2ItemFieldSingleSelectValue{name}}' % GF) if GF else ''
 Q = '''query($a:String){%s(login:"%s"){projectV2(number:%d){title url
  fields(first:60){nodes{... on ProjectV2FieldCommon{name}}}
  field(name:"%s"){... on ProjectV2SingleSelectField{options{name}}}
  items(first:100,after:$a){pageInfo{hasNextPage endCursor} nodes{
- st:fieldValueByName(name:"%s"){... on ProjectV2ItemFieldSingleSelectValue{name}} %s %s
+ st:fieldValueByName(name:"%s"){... on ProjectV2ItemFieldSingleSelectValue{name}} %s %s %s
  content{... on Issue{number title url state stateReason closedAt updatedAt labels(first:8){nodes{name}} parent{number} subIssuesSummary{total completed}}
          ... on PullRequest{number title url state updatedAt labels(first:8){nodes{name}}}
-         ... on DraftIssue{title}}}}}}}''' % (KIND, OWNER, NUM, SF, SF, grp, est)
+         ... on DraftIssue{title}}}}}}}''' % (KIND, OWNER, NUM, SF, SF, grp, est, hud)
+Q = Q.replace(' field(name', hopt + '\n field(name', 1)
 def gql(after):
     cmd = ['gh', 'api', 'graphql', '-f', 'query=' + Q] + (['-f', 'a=' + after] if after else [])
     env = dict(os.environ); env['GH_TOKEN'] = os.environ.get('BOARD_TOKEN') or os.environ.get('GH_TOKEN', '')
@@ -42,14 +52,15 @@ while True:
         sub = c.get('subIssuesSummary') or {}
         epic = EL in labels or c['title'].startswith('[Epic]') or sub.get('total', 0) > 0
         items.append(dict(number=c.get('number'), title=c['title'], url=c.get('url'), state=c.get('state', 'OPEN'), status=(n['st'] or {}).get('name'),
-            group=(n.get('gr') or {}).get('name') if GF else None, estimate=(n.get('es') or {}).get('number') if EF else None, epic=epic, parent=(c.get('parent') or {}).get('number'),
+            group=(n.get('gr') or {}).get('name') if GF else None, huddle=(n.get('hd') or {}).get('name'), estimate=(n.get('es') or {}).get('number') if EF else None, epic=epic, parent=(c.get('parent') or {}).get('number'),
             closed=c.get('closedAt'), reason=c.get('stateReason'), total=sub.get('total', 0), done=sub.get('completed', 0), updated=c.get('updatedAt'), labels=labels))
     if not p['items']['pageInfo']['hasNextPage']: break
     after = p['items']['pageInfo']['endCursor']
 FN = [f['name'] for f in (proj.get('fields') or {}).get('nodes', []) if f]
-for key in ('statusField', 'groupField', 'estimateField'):
+for key in ('statusField', 'groupField', 'estimateField', 'huddleField'):
     v = cfg.get(key) or ('Status' if key == 'statusField' else None)
     if v and FN and v not in FN: sys.exit('Config error: "%s" is "%s" but project %s has these fields: %s.' % (key, v, NUM, ', '.join(FN)))
+HUDDLES = [o['name'] for o in ((proj.get('hf') or {}).get('options') or [])]
 order = [o['name'] for o in ((proj.get('field') or {}).get('options') or [])]
 if not order: sys.exit('Config error: field "%s" has no options. It must be a single select field.' % SF)
 for key in ('hideStatuses', 'needsMe', 'building'):
@@ -79,7 +90,7 @@ if not working:
 counts = {}
 for i in live: counts[i['status'] or 'No status'] = counts.get(i['status'] or 'No status', 0) + 1
 out = dict(generated=datetime.datetime.now(datetime.timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ'), title=cfg.get('title', proj['title']),
-    project=proj['title'], project_url=proj['url'], statuses=order, group_order=cfg.get('groupOrder', []), needs_me=cfg.get('needsMe', []),
+    project=proj['title'], project_url=proj['url'], statuses=order, group_order=cfg.get('groupOrder', []), huddles=HUDDLES, needs_me=cfg.get('needsMe', []),
     building=cfg.get('building', []), group_field=GF, hidden_count=len(hidden), hidden_tasks=len([i for i in hidden if not i['epic']]), counts=counts, tiles=cfg.get('tiles'), last_closed=last_closed, recent_done=recent_done, working=working, items=live)
 os.makedirs('data', exist_ok=True)
 json.dump(out, open('data/board.json', 'w'), indent=1)

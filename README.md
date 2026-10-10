@@ -76,3 +76,11 @@ Early, built in public. Issues and pull requests are welcome. Licence: MIT.
 4. Copy `.github/workflows/refresh.yml` from the example repo. It checks out this repo as `tool/`, runs `python3 tool/scripts/fetch_board.py`, then publishes `tool/index.html` with `data/board.json`.
 5. Add a repo secret `BOARD_TOKEN`: a token that can read the project and the watched repo's Actions.
 6. Turn on Pages with the "GitHub Actions" source, then run the workflow once.
+
+## Huddles
+
+A huddle is the planning horizon: the space where people and the agent talk about the next phase. Epics are the plays inside it. It is a single-select field on the GitHub project (default name `Huddle`, set another with `huddleField`). The order of the field options is the priority order, top first.
+
+Grandstand adds a Huddles tab when the field exists and an epic has a value. Each huddle lists its epics with rolled-up progress and the tickets in Dev. Tickets show the huddle of their epic.
+
+Pull rule: the work loop takes Ready tickets from epics in the top huddle first. Tickets whose epic has no huddle are taken only when the top huddle has none. Grandstand stays read-only: split, reorder and move changes are agreed in conversation and then applied to the tickets.
