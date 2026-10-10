@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light dark"><meta name="theme-color" content="#0f1115">
+<title>HN explorer board</title>
+<style>
+:root{--bg:#f6f4ef;--card:#fff;--ink:#16181d;--mute:#6b7280;--line:#e5e1d8;--acc:#ff6600;--ok:#1f9d55;--chip:#efece4}
+@media(prefers-color-scheme:dark){:root{--bg:#0f1115;--card:#171a21;--ink:#eceef2;--mute:#8b93a1;--line:#252a33;--chip:#222732}}
+*{box-sizing:border-box}html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.4 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;padding-bottom:env(safe-area-inset-bottom)}
+header{padding:18px 16px 8px;max-width:640px;margin:0 auto}
+h1{font-size:20px;margin:0;letter-spacing:-.01em}
+.sub{color:var(--mute);font-size:12.5px;margin-top:2px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:14px 0 4px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:8px 6px;text-align:center}
+.stat b{display:block;font-size:20px;line-height:1.1}.stat span{font-size:10.5px;color:var(--mute);text-transform:uppercase;letter-spacing:.04em}
+nav{position:sticky;top:0;z-index:5;background:var(--bg);padding:8px 12px;display:flex;gap:6px;max-width:640px;margin:0 auto;border-bottom:1px solid var(--line)}
+nav button{flex:1;font:inherit;font-size:13px;font-weight:600;padding:9px 4px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--mute);cursor:pointer}
+nav button[aria-selected=true]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+nav button i{font-style:normal;opacity:.7;font-weight:500;margin-left:3px}
+main{max-width:640px;margin:0 auto;padding:12px 12px 40px}
+.item{display:block;text-decoration:none;color:inherit;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 13px;margin-bottom:9px}
+.item:active{transform:scale(.995)}
+.row{display:flex;gap:8px;align-items:flex-start;justify-content:space-between}
+.t{font-weight:600;font-size:15px}.s{color:var(--mute);font-size:13px;margin-top:2px}
+.num{color:var(--mute);font-size:12px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.chip{font-size:11px;font-weight:600;border-radius:99px;padding:2px 9px;background:var(--chip);color:var(--mute)}
+.chip.now{background:var(--acc);color:#fff}.chip.next{background:#3b82f6;color:#fff}.chip.later{background:var(--chip)}
+.chip.need{background:#e11d48;color:#fff}
+.bar{height:6px;border-radius:9px;background:var(--chip);margin-top:9px;overflow:hidden}.bar i{display:block;height:100%;background:var(--ok);border-radius:9px}
+.grp{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--mute);margin:16px 2px 8px;display:flex;justify-content:space-between}
+.empty{text-align:center;color:var(--mute);padding:36px 10px}
+footer{max-width:640px;margin:0 auto;padding:0 16px 30px;color:var(--mute);font-size:12px;text-align:center}
+footer a{color:inherit}
+</style></head><body>
+<header><h1>HN explorer board</h1><div class="sub" id="gen">Loading...</div><div class="stats" id="stats"></div></header>
+<nav id="tabs" role="tablist"></nav>
+<main id="main"></main>
+<footer id="foot"></footer>
+<script>
+const TABS=[['need','Needs me'],['build','Building'],['epics','Epics'],['pipe','Pipeline']];
+const ORDER=['Needs decision','QA','Dev','Ready','Grooming','Defined'];
+let D=null,tab=(location.hash||'#need').slice(1);if(!TABS.some(t=>t[0]===tab))tab='need';
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const clean=t=>t.replace(/^\[Epic\]\s*-\s*/,'');
+function split(t){const c=clean(t),p=c.split(' - ');return p.length>1&&/^\[Epic\]/.test(t)?[p[0],p.slice(1).join(' - ')]:[c,''];}
+function ago(iso){const s=(Date.now()-new Date(iso))/1000;if(s<90)return'just now';if(s<3600)return Math.round(s/60)+' min ago';if(s<86400)return Math.round(s/3600)+' h ago';return Math.round(s/86400)+' d ago';}
+function item(i){const[a,b]=split(i.title);const epic=i.epic;
+ const chips=[`<span class="chip${i.status==='Needs decision'||i.status==='QA'?' need':''}">${esc(i.status||'No status')}</span>`];
+ if(i.horizon)chips.push(`<span class="chip ${i.horizon.toLowerCase()}">${esc(i.horizon)}</span>`);
+ if(epic&&i.total)chips.push(`<span class="chip">${i.done}/${i.total} done</span>`);
+ const bar=epic&&i.total?`<div class="bar"><i style="width:${Math.round(100*i.done/i.total)}%"></i></div>`:'';
+ return `<a class="item" href="${esc(i.url)}"><div class="row"><div><div class="t">${esc(a)}</div>${b?`<div class="s">${esc(b)}</div>`:''}</div><div class="num">#${i.number}</div></div><div class="chips">${chips.join('')}</div>${bar}</a>`;}
+function list(arr,empty){return arr.length?arr.map(item).join(''):`<div class="empty">${empty}</div>`;}
+const by=(f)=>D.items.filter(f);
+function views(){
+ const need=by(i=>i.status==='Needs decision'||i.status==='QA');
+ const build=by(i=>(i.status==='Ready'||i.status==='Dev')&&!i.epic);
+ const epics=by(i=>i.epic).sort((a,b)=>['Now','Next','Later',null].indexOf(a.horizon||null)-['Now','Next','Later',null].indexOf(b.horizon||null)||a.number-b.number);
+ return{need,build,epics};}
+function render(){
+ const v=views();
+ document.getElementById('tabs').innerHTML=TABS.map(([k,n])=>{const c=k==='pipe'?D.items.length:(v[k]||[]).length;return`<button role="tab" aria-selected="${k===tab}" data-t="${k}">${n}<i>${c}</i></button>`}).join('');
+ let h='';
+ if(tab==='need')h=list(v.need,'Nothing is waiting on you.');
+ else if(tab==='build')h=list(v.build,'Nothing in Ready or Dev right now.');
+ else if(tab==='epics'){let last;for(const e of v.epics){const g=e.horizon||'No horizon';if(g!==last){h+=`<div class="grp"><span>${g}</span></div>`;last=g}h+=item(e)}}
+ else for(const s of ORDER){const a=D.items.filter(i=>i.status===s);if(!a.length)continue;h+=`<div class="grp"><span>${s}</span><span>${a.length}</span></div>`+a.map(item).join('')}
+ document.getElementById('main').innerHTML=h;
+ document.querySelectorAll('#tabs button').forEach(b=>b.onclick=()=>{tab=b.dataset.t;location.hash=tab;render();window.scrollTo(0,0)});}
+fetch('data/board.json',{cache:'no-cache'}).then(r=>r.json()).then(d=>{D=d;
+ document.getElementById('gen').textContent='Updated '+ago(d.generated);
+ const c=d.counts||{};const act=(c['Dev']||0)+(c['Ready']||0);
+ document.getElementById('stats').innerHTML=[['Needs me',(c['Needs decision']||0)+(c['QA']||0)],['Building',act],['Grooming',c['Grooming']||0],['Defined',c['Defined']||0]].map(([n,x])=>`<div class="stat"><b>${x}</b><span>${n}</span></div>`).join('');
+ document.getElementById('foot').innerHTML=`${d.done_tasks} tasks finished (hidden). <a href="${esc(d.project_url)}">Open the GitHub board</a>`;
+ render();}).catch(e=>{document.getElementById('gen').textContent='Could not load the board data.'});
+</script></body></html>
