@@ -105,8 +105,9 @@ fetch('data/board.json',{cache:'no-cache'}).then(r=>r.json()).then(d=>{D=d;NEED=
  document.getElementById('gen').textContent='Updated '+ago(d.generated)+' · refreshes every 5 min and on every board change';
  if(d.working)document.getElementById('gen').insertAdjacentHTML('afterend',`<div class="sub" id="wn"><b style="color:#2da44e">&#9679; WORKING NOW</b> · <a href="${esc(d.working.url)}">${esc(d.working.name)}</a> ${d.working.started?'started '+ago(d.working.started):'in Dev'}</div>`);
  const c=d.counts||{};const sum=a=>a.reduce((t,k)=>t+(c[k]||0),0);const rest=ORDER.filter(s=>!NEED.includes(s)&&!BUILD.includes(s)).slice(-2).reverse();
- document.getElementById('stats').innerHTML=[['In dev',c.Dev||0],['Ready',c.Ready||0],['Grooming',c.Grooming||0],['Defined',c.Defined||0]].map(([n,x])=>`<div class="stat"><b>${x}</b><span>${n}</span></div>`).join('');
+ document.getElementById('stats').innerHTML=(d.tiles||[['In dev','Dev'],['Ready','Ready'],['Grooming','Grooming'],['Defined','Defined']]).map(([n,k])=>[n,c[k]||0]).map(([n,x])=>`<div class="stat"><b>${x}</b><span>${n}</span></div>`).join('');
  document.getElementById('foot').innerHTML=`${d.hidden_tasks} finished tasks hidden. <a href="${esc(d.project_url)}">Open the GitHub board</a>`;
 
  render();}).catch(e=>{document.getElementById('gen').textContent='Could not load the board data.'});
+setInterval(()=>{if(!document.hidden)location.reload()},60000);
 </script></body></html>
