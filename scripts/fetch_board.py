@@ -5,15 +5,17 @@ import json, os, subprocess, sys, datetime
 cfg = json.load(open(os.environ.get('BOARD_CONFIG', 'board.config.json')))
 OWNER = cfg['owner']; NUM = int(cfg['project']); KIND = 'organization' if cfg.get('ownerType', 'user') == 'org' or cfg.get('ownerType') == 'organization' else 'user'
 SF = cfg.get('statusField', 'Status'); GF = cfg.get('groupField'); EL = cfg.get('epicLabel', 'epic')
+EF = cfg.get('estimateField')
 HIDE = set(cfg.get('hideStatuses', ['Done']))
+est = ('es:fieldValueByName(name:"%s"){... on ProjectV2ItemFieldNumberValue{number}}' % EF) if EF else ''
 grp = ('gr:fieldValueByName(name:"%s"){... on ProjectV2ItemFieldSingleSelectValue{name}}' % GF) if GF else ''
 Q = '''query($a:String){%s(login:"%s"){projectV2(number:%d){title url
  field(name:"%s"){... on ProjectV2SingleSelectField{options{name}}}
  items(first:100,after:$a){pageInfo{hasNextPage endCursor} nodes{
- st:fieldValueByName(name:"%s"){... on ProjectV2ItemFieldSingleSelectValue{name}} %s
+ st:fieldValueByName(name:"%s"){... on ProjectV2ItemFieldSingleSelectValue{name}} %s %s
  content{... on Issue{number title url state updatedAt labels(first:8){nodes{name}} parent{number} subIssuesSummary{total completed}}
          ... on PullRequest{number title url state updatedAt labels(first:8){nodes{name}}}
-         ... on DraftIssue{title}}}}}}}''' % (KIND, OWNER, NUM, SF, SF, grp)
+         ... on DraftIssue{title}}}}}}}''' % (KIND, OWNER, NUM, SF, SF, grp, est)
 def gql(after):
     cmd = ['gh', 'api', 'graphql', '-f', 'query=' + Q] + (['-f', 'a=' + after] if after else [])
     env = dict(os.environ); env['GH_TOKEN'] = os.environ.get('BOARD_TOKEN') or os.environ.get('GH_TOKEN', '')
@@ -32,7 +34,7 @@ while True:
         sub = c.get('subIssuesSummary') or {}
         epic = EL in labels or c['title'].startswith('[Epic]') or sub.get('total', 0) > 0
         items.append(dict(number=c.get('number'), title=c['title'], url=c.get('url'), state=c.get('state', 'OPEN'), status=(n['st'] or {}).get('name'),
-            group=(n.get('gr') or {}).get('name') if GF else None, epic=epic, parent=(c.get('parent') or {}).get('number'),
+            group=(n.get('gr') or {}).get('name') if GF else None, estimate=(n.get('es') or {}).get('number') if EF else None, epic=epic, parent=(c.get('parent') or {}).get('number'),
             total=sub.get('total', 0), done=sub.get('completed', 0), updated=c.get('updatedAt'), labels=labels))
     if not p['items']['pageInfo']['hasNextPage']: break
     after = p['items']['pageInfo']['endCursor']

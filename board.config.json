@@ -5,9 +5,22 @@
   "project": 1,
   "statusField": "Status",
   "groupField": "Horizon",
-  "groupOrder": ["Now", "Next", "Later"],
+  "groupOrder": [
+    "Now",
+    "Next",
+    "Later"
+  ],
   "epicLabel": "epic",
-  "hideStatuses": ["Done"],
-  "needsMe": ["Needs decision", "QA"],
-  "building": ["Ready", "Dev"]
+  "hideStatuses": [
+    "Done"
+  ],
+  "needsMe": [
+    "Needs decision",
+    "QA"
+  ],
+  "building": [
+    "Ready",
+    "Dev"
+  ],
+  "estimateField": "Estimate (h)"
 }

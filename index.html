@@ -44,6 +44,8 @@ main{max-width:640px;margin:0 auto;padding:6px 12px 40px}
 .bar i{display:block;height:100%;border-radius:9px;background:repeating-linear-gradient(90deg,var(--pitch2) 0 14px,var(--pitch) 14px 28px)}
 .grp{font:800 11px ui-monospace,Menlo,monospace;text-transform:uppercase;letter-spacing:.16em;color:var(--mute);margin:16px 2px 8px;display:flex;justify-content:space-between;align-items:center}
 .grp:after{content:"";flex:1;height:1px;background:var(--line);margin-left:10px;order:1}.grp span+span{order:2;margin-left:10px}
+.clear{display:inline-block;vertical-align:middle;width:22px;height:22px;color:var(--pitch2)}.empty .clear{width:30px;height:30px;display:block;margin:0 auto 10px;opacity:.9}
+.right{display:inline-flex;align-items:center;gap:8px}.needpill{border:0;background:none;padding:2px;cursor:pointer;font:700 10.5px/1 ui-monospace,Menlo,monospace;letter-spacing:.06em;color:var(--pitch2);display:inline-flex;align-items:center;gap:5px}.needpill .clear{width:18px;height:18px}.needpill.on{background:var(--clay);color:#4a2517;border-radius:99px;padding:5px 9px;text-transform:uppercase}
 .empty{text-align:center;color:var(--mute);padding:36px 10px}
 footer{max-width:640px;margin:0 auto;padding:0 16px 24px;color:var(--mute);font-size:12px;text-align:center}
 footer a{color:inherit}
@@ -64,10 +66,12 @@ const slug=x=>x==='Needs decision'?'need':String(x||'').toLowerCase().replace(/[
 function item(i){const[a,b]=split(i.title);const epic=i.epic;
  const chips=[`<span class="chip k-${slug(i.status)}">${esc(i.status||'No status')}</span>`];
  if(i.group)chips.push(`<span class="chip ${i.group.toLowerCase()}">${esc(i.group)}</span>`);
+ if(!epic&&i.estimate)chips.push(`<span class="chip est">${i.estimate<1?Math.round(i.estimate*60)+' min':'~'+i.estimate+' h'}</span>`);
  if(epic&&i.total)chips.push(`<span class="chip prog">${i.done}/${i.total} done</span>`);
  const bar=epic&&i.total?`<div class="bar"><i style="width:${Math.round(100*i.done/i.total)}%"></i></div>`:'';
  return `<a class="item st-${slug(i.status)}" href="${esc(i.url)}"><div class="row"><div><div class="t">${esc(a)}</div>${b?`<div class="s">${esc(b)}</div>`:''}</div><div class="num">#${i.number}</div></div><div class="chips">${chips.join('')}</div>${bar}</a>`;}
-function list(arr,empty){return arr.length?arr.map(item).join(''):`<div class="empty">${empty}</div>`;}
+const MARK='<svg class="clear" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="All clear"><path d="M12 2.8 4.5 5.6v5.7c0 4.6 3.1 8.1 7.5 9.9 4.4-1.8 7.5-5.3 7.5-9.9V5.6z"/><path d="m8.6 12.1 2.4 2.4 4.6-4.9"/></svg>';
+function list(arr,empty){return arr.length?arr.map(item).join(''):`<div class="empty">${arr.__need?MARK:''}${empty}</div>`;}
 const gi=g=>{const k=GROUPS.indexOf(g);return k<0?99:k};
 const by=(f)=>D.items.filter(f);
 function views(){
@@ -79,7 +83,7 @@ function render(){
  const v=views();
  document.getElementById('tabs').innerHTML=TABS.map(([k,n])=>{const c=k==='pipe'?D.items.length:(v[k]||[]).length;return`<button role="tab" aria-selected="${k===tab}" data-t="${k}">${n}<i>${c}</i></button>`}).join('');
  let h='';
- if(tab==='need')h=list(v.need,'Nothing is waiting on you.');
+ if(tab==='need'){v.need.__need=1;h=list(v.need,'All clear. Nothing is waiting on you.');}
  else if(tab==='build')h=list(v.build,'Nothing in Ready or Dev right now.');
  else if(tab==='epics'){let last;for(const e of v.epics){const g=e.group||'No group';if(g!==last){h+=`<div class="grp"><span>${g}</span></div>`;last=g}h+=item(e)}}
  else for(const s of ORDER){const a=D.items.filter(i=>i.status===s);if(!a.length)continue;h+=`<div class="grp"><span>${s}</span><span>${a.length}</span></div>`+a.map(item).join('')}
@@ -88,7 +92,8 @@ function render(){
 fetch('data/board.json',{cache:'no-cache'}).then(r=>r.json()).then(d=>{D=d;NEED=d.needs_me||[];BUILD=d.building||[];GROUPS=d.group_order||[];ORDER=(d.statuses||[]).filter(s=>d.counts[s]);document.title=d.title;document.querySelector('h1').textContent=d.title;
  document.getElementById('gen').textContent='Updated '+ago(d.generated)+' · refreshes every 30 min';
  const c=d.counts||{};const sum=a=>a.reduce((t,k)=>t+(c[k]||0),0);const rest=ORDER.filter(s=>!NEED.includes(s)&&!BUILD.includes(s)).slice(-2).reverse();
- document.getElementById('stats').innerHTML=[['Needs me',sum(NEED)],['Building',sum(BUILD)],...rest.map(s=>[s,c[s]||0])].map(([n,x])=>`<div class="stat"><b>${x}</b><span>${n}</span></div>`).join('');
+ document.getElementById('stats').innerHTML=[['Needs me',sum(NEED)],['Building',sum(BUILD)],...rest.map(s=>[s,c[s]||0])].map(([n,x])=>`<div class="stat"><b>${n==='Needs me'&&!x?MARK:x}</b><span>${n}</span></div>`).join('');
  document.getElementById('foot').innerHTML=`${d.hidden_tasks} finished tasks hidden. <a href="${esc(d.project_url)}">Open the GitHub board</a>`;
+
  render();}).catch(e=>{document.getElementById('gen').textContent='Could not load the board data.'});
 </script></body></html>
