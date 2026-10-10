@@ -30,6 +30,7 @@ nav button{flex:1;font:inherit;font-size:12.5px;font-weight:700;padding:9px 2px;
 nav button[aria-selected=true]{background:var(--pitch);color:#1d2b24;border-color:var(--pitch)}
 nav button i{font-style:normal;font-family:ui-monospace,Menlo,monospace;opacity:.75;font-weight:600;margin-left:4px;font-size:11.5px}
 main{max-width:640px;margin:0 auto;padding:6px 12px 40px}
+.ld>summary{cursor:pointer;list-style:none}.ld>summary::-webkit-details-marker{display:none}.ld>summary span:first-child::before{content:'\25B8 '}.ld[open]>summary span:first-child::before{content:'\25BE '}
 .item{display:block;text-decoration:none;color:inherit;background:var(--card);border:1px solid var(--line);border-left:5px solid var(--kit,var(--line));border-radius:12px;padding:11px 13px;margin-bottom:8px}
 .item:active{transform:scale(.995)}
 .row{display:flex;gap:8px;align-items:flex-start;justify-content:space-between}
@@ -63,6 +64,7 @@ footer a{color:inherit}
 <main id="main"></main>
 <footer id="foot"></footer><footer style="padding-top:0">Made with <a href="https://github.com/agamrafaeli-instinct/grandstand">Grandstand</a>: watch your coding agent work</footer>
 <script>
+let LD=sessionStorage.getItem('ld')==='1';
 const TABS=[['sprint','Sprint'],['epics','Epics'],['pipe','Pipeline'],['need','Needs me']];
 let ORDER=[];
 let NEED=[],BUILD=[],GROUPS=[],D=null,tab=(location.hash||'#sprint').slice(1);if(!TABS.some(t=>t[0]===tab))tab='sprint';
@@ -94,12 +96,13 @@ function render(){
  let h='';
  if(tab==='need')h=list(v.need,'Nothing is waiting on you.');
  else if(tab==='sprint'){const g=(n,a,cap)=>`<div class="grp"><span>${n}</span><span>${a.length}</span></div>`+(cap?`<div class="cap">${cap}</div>`:'');
-  h=(D.recent_done&&D.recent_done.length?g('Last done',D.recent_done)+D.recent_done.map(x=>`<a class="item" href="${esc(x.url)}"><div class="row"><div><div class="t">${esc(x.title)}</div><div class="s">${new Date(x.closed).toLocaleString([], {month:'short',day:'numeric',hour:'numeric',minute:'2-digit'})} (${ago(x.closed)})</div></div><div class="num">#${x.number}</div></div></a>`).join(''):'')+g('In flight',v.dev)+list(v.dev,'Nothing in Dev right now.')+g('Up next',v.ready,'Taken top to bottom: the first one is next.')+list(v.ready,'Nothing groomed and ready.');
+  h=(D.recent_done&&D.recent_done.length?`<details class="ld"${LD?' open':''}><summary class="grp"><span>Last done</span><span>${D.recent_done.length}</span></summary>`+D.recent_done.map(x=>`<a class="item" href="${esc(x.url)}"><div class="row"><div><div class="t">${esc(x.title)}</div><div class="s">${new Date(x.closed).toLocaleString([], {month:'short',day:'numeric',hour:'numeric',minute:'2-digit'})} (${ago(x.closed)})</div></div><div class="num">#${x.number}</div></div></a>`).join('')+'</details>':'')+g('In flight',v.dev)+list(v.dev,'Nothing in Dev right now.')+g('Up next',v.ready,'Taken top to bottom: the first one is next.')+list(v.ready,'Nothing groomed and ready.');
   if(v.need.length)h+=g('Waiting on review',v.need,'')+v.need.map(item).join('');
   if(v.now.length)h+=g('Now: epic progress',v.now)+v.now.map(item).join('');}
  else if(tab==='epics'){let last;for(const e of v.epics){const g=e.group||'No group';if(g!==last){h+=`<div class="grp"><span>${g}</span></div>`;last=g}h+=item(e)}}
  else for(const s of ORDER){const a=D.items.filter(i=>i.status===s);if(!a.length)continue;h+=`<div class="grp"><span>${s}</span><span>${a.length}</span></div>`+a.map(item).join('')}
  document.getElementById('main').innerHTML=h;
+ const ld=document.querySelector('details.ld');if(ld)ld.ontoggle=()=>{LD=ld.open;sessionStorage.setItem('ld',LD?'1':'0')};
  document.querySelectorAll('#tabs button').forEach(b=>b.onclick=()=>{tab=b.dataset.t;location.hash=tab;render();window.scrollTo(0,0)});}
 fetch('data/board.json',{cache:'no-cache'}).then(r=>r.json()).then(d=>{D=d;NEED=d.needs_me||[];BUILD=d.building||[];GROUPS=d.group_order||[];ORDER=(d.statuses||[]).filter(s=>d.counts[s]);document.title=d.title;document.querySelector('h1').textContent=d.title;
  document.getElementById('gen').textContent='Updated '+ago(d.generated)+' · refreshes every 5 min and on every board change';
