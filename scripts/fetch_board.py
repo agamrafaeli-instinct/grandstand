@@ -43,11 +43,27 @@ hidden = [i for i in items if i['status'] in HIDE or i['state'] in ('CLOSED', 'M
 live = [i for i in items if i not in hidden]
 done = sorted([i for i in hidden if i.get('closed') and i.get('reason') != 'NOT_PLANNED' and not i['epic'] and i['status'] in HIDE], key=lambda i: i['closed'])
 last_closed = ({k: done[-1][k] for k in ('number', 'title', 'url', 'closed')} if done else None)
+recent_done = [{k: i[k] for k in ('number', 'title', 'url', 'closed')} for i in reversed(done[-6:])]
+working = None
+try:
+    repo = cfg.get('workRepo', 'hn-1m-explorer')
+    runs = json.loads(subprocess.run(['gh', 'api', 'repos/%s/%s/actions/runs?per_page=10' % (OWNER, repo)], capture_output=True, text=True, check=True).stdout)['workflow_runs']
+    now = datetime.datetime.now(datetime.timezone.utc)
+    for r in runs:
+        if 'Daily' not in r['name']: continue
+        st = datetime.datetime.strptime(r['run_started_at'], '%Y-%m-%dT%H:%M:%SZ').replace(tzinfo=datetime.timezone.utc)
+        if r['status'] in ('in_progress', 'queued') or (now - st).total_seconds() < 600:
+            working = dict(name=r['name'], url=r['html_url'], started=r['run_started_at'], status=r['status']); break
+except Exception as e:
+    print('runs unavailable', e)
+if not working:
+    dev = [i for i in live if i['status'] == 'Dev' and not i['epic']]
+    if dev: working = dict(name='#%d %s' % (dev[0]['number'], dev[0]['title']), url=dev[0]['url'], started=None, status='dev')
 counts = {}
 for i in live: counts[i['status'] or 'No status'] = counts.get(i['status'] or 'No status', 0) + 1
 out = dict(generated=datetime.datetime.now(datetime.timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ'), title=cfg.get('title', proj['title']),
     project=proj['title'], project_url=proj['url'], statuses=order, group_order=cfg.get('groupOrder', []), needs_me=cfg.get('needsMe', []),
-    building=cfg.get('building', []), group_field=GF, hidden_count=len(hidden), hidden_tasks=len([i for i in hidden if not i['epic']]), counts=counts, last_closed=last_closed, items=live)
+    building=cfg.get('building', []), group_field=GF, hidden_count=len(hidden), hidden_tasks=len([i for i in hidden if not i['epic']]), counts=counts, last_closed=last_closed, recent_done=recent_done, working=working, items=live)
 os.makedirs('data', exist_ok=True)
 json.dump(out, open('data/board.json', 'w'), indent=1)
 print('items', len(items), 'live', len(live), 'hidden', len(hidden), counts)

@@ -1,5 +1,5 @@
 {
- "generated": "2026-10-10T12:41:38Z",
+ "generated": "2026-10-10T14:00:04Z",
  "title": "HN explorer board",
  "project": "HN explorer roadmap",
  "project_url": "https://github.com/users/agamrafaeli-instinct/projects/1",
@@ -26,19 +26,63 @@
   "Dev"
  ],
  "group_field": "Horizon",
- "hidden_count": 78,
- "hidden_tasks": 74,
+ "hidden_count": 90,
+ "hidden_tasks": 85,
  "counts": {
-  "Grooming": 19,
-  "Defined": 10,
-  "Needs decision": 1,
-  "Ready": 4
+  "Grooming": 14,
+  "Defined": 7,
+  "Ready": 4,
+  "Dev": 1
  },
  "last_closed": {
-  "number": 152,
-  "title": "All-time pilot: five terms, old window against all-time",
-  "url": "https://github.com/agamrafaeli-instinct/hn-1m-explorer/issues/152",
-  "closed": "2026-10-10T11:46:00Z"
+  "number": 157,
+  "title": "Film cards: Curious round 2 (15 cards, h339-h353)",
+  "url": "https://github.com/agamrafaeli-instinct/hn-1m-explorer/issues/157",
+  "closed": "2026-10-10T13:58:28Z"
+ },
+ "recent_done": [
+  {
+   "number": 157,
+   "title": "Film cards: Curious round 2 (15 cards, h339-h353)",
+   "url": "https://github.com/agamrafaeli-instinct/hn-1m-explorer/issues/157",
+   "closed": "2026-10-10T13:58:28Z"
+  },
+  {
+   "number": 156,
+   "title": "Film cards: VC (14 cards, h319-h332)",
+   "url": "https://github.com/agamrafaeli-instinct/hn-1m-explorer/issues/156",
+   "closed": "2026-10-10T13:13:52Z"
+  },
+  {
+   "number": 155,
+   "title": "Film cards: Engineers (19 cards, h300-h318)",
+   "url": "https://github.com/agamrafaeli-instinct/hn-1m-explorer/issues/155",
+   "closed": "2026-10-10T13:04:46Z"
+  },
+  {
+   "number": 154,
+   "title": "Film foundation: shared builder, monthly shares, pooled base",
+   "url": "https://github.com/agamrafaeli-instinct/hn-1m-explorer/issues/154",
+   "closed": "2026-10-10T12:49:08Z"
+  },
+  {
+   "number": 152,
+   "title": "All-time pilot: five terms, old window against all-time",
+   "url": "https://github.com/agamrafaeli-instinct/hn-1m-explorer/issues/152",
+   "closed": "2026-10-10T11:46:00Z"
+  },
+  {
+   "number": 129,
+   "title": "Render story layout and chart annotations",
+   "url": "https://github.com/agamrafaeli-instinct/hn-1m-explorer/issues/129",
+   "closed": "2026-10-10T11:06:33Z"
+  }
+ ],
+ "working": {
+  "name": "Daily Hacker News update and Pages",
+  "url": "https://github.com/agamrafaeli-instinct/hn-1m-explorer/actions/runs/38057477775",
+  "started": "2026-10-10T13:53:39Z",
+  "status": "completed"
  },
  "items": [
   {
@@ -54,7 +98,7 @@
    "closed": null,
    "reason": null,
    "total": 2,
-   "done": 1,
+   "done": 2,
    "updated": "2026-10-09T11:55:23Z",
    "labels": [
     "epic"
@@ -191,25 +235,6 @@
    "updated": "2026-10-09T11:55:32Z",
    "labels": [
     "epic"
-   ]
-  },
-  {
-   "number": 80,
-   "title": "Define what counts as a flip",
-   "url": "https://github.com/agamrafaeli-instinct/hn-1m-explorer/issues/80",
-   "state": "OPEN",
-   "status": "Needs decision",
-   "group": null,
-   "estimate": 0.75,
-   "epic": false,
-   "parent": 63,
-   "closed": null,
-   "reason": null,
-   "total": 0,
-   "done": 0,
-   "updated": "2026-10-10T08:43:37Z",
-   "labels": [
-    "task"
    ]
   },
   {
@@ -453,105 +478,10 @@
    "closed": null,
    "reason": null,
    "total": 11,
-   "done": 6,
+   "done": 11,
    "updated": "2026-10-10T07:29:19Z",
    "labels": [
     "epic"
-   ]
-  },
-  {
-   "number": 145,
-   "title": "Upgrade card h002: sharp, interesting, relevant",
-   "url": "https://github.com/agamrafaeli-instinct/hn-1m-explorer/issues/145",
-   "state": "OPEN",
-   "status": "Grooming",
-   "group": null,
-   "estimate": 2.0,
-   "epic": false,
-   "parent": 133,
-   "closed": null,
-   "reason": null,
-   "total": 0,
-   "done": 0,
-   "updated": "2026-10-10T07:49:58Z",
-   "labels": [
-    "needs-upgrade"
-   ]
-  },
-  {
-   "number": 146,
-   "title": "Upgrade card h001: interesting, relevant",
-   "url": "https://github.com/agamrafaeli-instinct/hn-1m-explorer/issues/146",
-   "state": "OPEN",
-   "status": "Grooming",
-   "group": null,
-   "estimate": 2.0,
-   "epic": false,
-   "parent": 133,
-   "closed": null,
-   "reason": null,
-   "total": 0,
-   "done": 0,
-   "updated": "2026-10-10T07:49:59Z",
-   "labels": [
-    "needs-upgrade"
-   ]
-  },
-  {
-   "number": 147,
-   "title": "Upgrade card h003: interesting, relevant",
-   "url": "https://github.com/agamrafaeli-instinct/hn-1m-explorer/issues/147",
-   "state": "OPEN",
-   "status": "Grooming",
-   "group": null,
-   "estimate": null,
-   "epic": false,
-   "parent": 133,
-   "closed": null,
-   "reason": null,
-   "total": 0,
-   "done": 0,
-   "updated": "2026-10-10T07:50:00Z",
-   "labels": [
-    "needs-upgrade"
-   ]
-  },
-  {
-   "number": 148,
-   "title": "Upgrade card h004: interesting, relevant",
-   "url": "https://github.com/agamrafaeli-instinct/hn-1m-explorer/issues/148",
-   "state": "OPEN",
-   "status": "Grooming",
-   "group": null,
-   "estimate": null,
-   "epic": false,
-   "parent": 133,
-   "closed": null,
-   "reason": null,
-   "total": 0,
-   "done": 0,
-   "updated": "2026-10-10T07:50:01Z",
-   "labels": [
-    "needs-upgrade"
-   ]
-  },
-  {
-   "number": 149,
-   "title": "Upgrade card h005: interesting, relevant",
-   "url": "https://github.com/agamrafaeli-instinct/hn-1m-explorer/issues/149",
-   "state": "OPEN",
-   "status": "Grooming",
-   "group": null,
-   "estimate": null,
-   "epic": false,
-   "parent": 133,
-   "closed": null,
-   "reason": null,
-   "total": 0,
-   "done": 0,
-   "updated": "2026-10-10T07:50:02Z",
-   "labels": [
-    "needs-upgrade"
    ]
   },
   {
@@ -566,87 +496,11 @@
    "parent": null,
    "closed": null,
    "reason": null,
-   "total": 6,
-   "done": 0,
+   "total": 7,
+   "done": 5,
    "updated": "2026-10-10T12:40:44Z",
    "labels": [
     "epic"
-   ]
-  },
-  {
-   "number": 154,
-   "title": "Film foundation: shared builder, monthly shares, pooled base",
-   "url": "https://github.com/agamrafaeli-instinct/hn-1m-explorer/issues/154",
-   "state": "OPEN",
-   "status": "Ready",
-   "group": null,
-   "estimate": null,
-   "epic": false,
-   "parent": 153,
-   "closed": null,
-   "reason": null,
-   "total": 0,
-   "done": 0,
-   "updated": "2026-10-10T12:40:46Z",
-   "labels": [
-    "task"
-   ]
-  },
-  {
-   "number": 155,
-   "title": "Film cards: Engineers (19 cards, h300-h318)",
-   "url": "https://github.com/agamrafaeli-instinct/hn-1m-explorer/issues/155",
-   "state": "OPEN",
-   "status": "Defined",
-   "group": null,
-   "estimate": null,
-   "epic": false,
-   "parent": 153,
-   "closed": null,
-   "reason": null,
-   "total": 0,
-   "done": 0,
-   "updated": "2026-10-10T12:40:50Z",
-   "labels": [
-    "task"
-   ]
-  },
-  {
-   "number": 156,
-   "title": "Film cards: VC (20 cards, h319-h338)",
-   "url": "https://github.com/agamrafaeli-instinct/hn-1m-explorer/issues/156",
-   "state": "OPEN",
-   "status": "Defined",
-   "group": null,
-   "estimate": null,
-   "epic": false,
-   "parent": 153,
-   "closed": null,
-   "reason": null,
-   "total": 0,
-   "done": 0,
-   "updated": "2026-10-10T12:40:54Z",
-   "labels": [
-    "task"
-   ]
-  },
-  {
-   "number": 157,
-   "title": "Film cards: Curious round 2 (15 cards, h339-h353)",
-   "url": "https://github.com/agamrafaeli-instinct/hn-1m-explorer/issues/157",
-   "state": "OPEN",
-   "status": "Defined",
-   "group": null,
-   "estimate": null,
-   "epic": false,
-   "parent": 153,
-   "closed": null,
-   "reason": null,
-   "total": 0,
-   "done": 0,
-   "updated": "2026-10-10T12:40:57Z",
-   "labels": [
-    "task"
    ]
   },
   {
@@ -654,16 +508,16 @@
    "title": "Film cards: Geeks (15 cards replace the rolling cards)",
    "url": "https://github.com/agamrafaeli-instinct/hn-1m-explorer/issues/158",
    "state": "OPEN",
-   "status": "Defined",
+   "status": "Dev",
    "group": null,
-   "estimate": null,
+   "estimate": 4.0,
    "epic": false,
    "parent": 153,
    "closed": null,
    "reason": null,
    "total": 0,
    "done": 0,
-   "updated": "2026-10-10T12:41:02Z",
+   "updated": "2026-10-10T13:48:21Z",
    "labels": [
     "task"
    ]
@@ -675,7 +529,7 @@
    "state": "OPEN",
    "status": "Defined",
    "group": null,
-   "estimate": null,
+   "estimate": 0.75,
    "epic": false,
    "parent": 153,
    "closed": null,
@@ -685,6 +539,44 @@
    "updated": "2026-10-10T12:41:05Z",
    "labels": [
     "task"
+   ]
+  },
+  {
+   "number": 167,
+   "title": "[Epic] - Story finder - A new story each day",
+   "url": "https://github.com/agamrafaeli-instinct/hn-1m-explorer/issues/167",
+   "state": "OPEN",
+   "status": "Defined",
+   "group": null,
+   "estimate": null,
+   "epic": true,
+   "parent": null,
+   "closed": null,
+   "reason": null,
+   "total": 0,
+   "done": 0,
+   "updated": "2026-10-10T13:10:28Z",
+   "labels": [
+    "epic"
+   ]
+  },
+  {
+   "number": 169,
+   "title": "[Epic] - Compare first: topic comparison home",
+   "url": "https://github.com/agamrafaeli-instinct/hn-1m-explorer/issues/169",
+   "state": "OPEN",
+   "status": "Ready",
+   "group": null,
+   "estimate": null,
+   "epic": true,
+   "parent": null,
+   "closed": null,
+   "reason": null,
+   "total": 0,
+   "done": 0,
+   "updated": "2026-10-10T13:38:56Z",
+   "labels": [
+    "epic"
    ]
   }
  ]
