@@ -13,7 +13,7 @@ Q = '''query($a:String){%s(login:"%s"){projectV2(number:%d){title url
  field(name:"%s"){... on ProjectV2SingleSelectField{options{name}}}
  items(first:100,after:$a){pageInfo{hasNextPage endCursor} nodes{
  st:fieldValueByName(name:"%s"){... on ProjectV2ItemFieldSingleSelectValue{name}} %s %s
- content{... on Issue{number title url state updatedAt labels(first:8){nodes{name}} parent{number} subIssuesSummary{total completed}}
+ content{... on Issue{number title url state stateReason closedAt updatedAt labels(first:8){nodes{name}} parent{number} subIssuesSummary{total completed}}
          ... on PullRequest{number title url state updatedAt labels(first:8){nodes{name}}}
          ... on DraftIssue{title}}}}}}}''' % (KIND, OWNER, NUM, SF, SF, grp, est)
 def gql(after):
@@ -35,17 +35,19 @@ while True:
         epic = EL in labels or c['title'].startswith('[Epic]') or sub.get('total', 0) > 0
         items.append(dict(number=c.get('number'), title=c['title'], url=c.get('url'), state=c.get('state', 'OPEN'), status=(n['st'] or {}).get('name'),
             group=(n.get('gr') or {}).get('name') if GF else None, estimate=(n.get('es') or {}).get('number') if EF else None, epic=epic, parent=(c.get('parent') or {}).get('number'),
-            total=sub.get('total', 0), done=sub.get('completed', 0), updated=c.get('updatedAt'), labels=labels))
+            closed=c.get('closedAt'), reason=c.get('stateReason'), total=sub.get('total', 0), done=sub.get('completed', 0), updated=c.get('updatedAt'), labels=labels))
     if not p['items']['pageInfo']['hasNextPage']: break
     after = p['items']['pageInfo']['endCursor']
 order = [o['name'] for o in ((proj.get('field') or {}).get('options') or [])]
 hidden = [i for i in items if i['status'] in HIDE or i['state'] in ('CLOSED', 'MERGED')]
 live = [i for i in items if i not in hidden]
+done = sorted([i for i in hidden if i.get('closed') and i.get('reason') != 'NOT_PLANNED' and not i['epic'] and i['status'] in HIDE], key=lambda i: i['closed'])
+last_closed = ({k: done[-1][k] for k in ('number', 'title', 'url', 'closed')} if done else None)
 counts = {}
 for i in live: counts[i['status'] or 'No status'] = counts.get(i['status'] or 'No status', 0) + 1
 out = dict(generated=datetime.datetime.now(datetime.timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ'), title=cfg.get('title', proj['title']),
     project=proj['title'], project_url=proj['url'], statuses=order, group_order=cfg.get('groupOrder', []), needs_me=cfg.get('needsMe', []),
-    building=cfg.get('building', []), group_field=GF, hidden_count=len(hidden), hidden_tasks=len([i for i in hidden if not i['epic']]), counts=counts, items=live)
+    building=cfg.get('building', []), group_field=GF, hidden_count=len(hidden), hidden_tasks=len([i for i in hidden if not i['epic']]), counts=counts, last_closed=last_closed, items=live)
 os.makedirs('data', exist_ok=True)
 json.dump(out, open('data/board.json', 'w'), indent=1)
 print('items', len(items), 'live', len(live), 'hidden', len(hidden), counts)

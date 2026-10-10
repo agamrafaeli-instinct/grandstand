@@ -17,6 +17,7 @@ header{max-width:640px;margin:0 auto;padding:16px 14px 6px}
 @keyframes p{70%{box-shadow:0 0 0 7px rgba(229,127,106,0)}100%{box-shadow:0 0 0 0 rgba(229,127,106,0)}}
 @media(prefers-reduced-motion:reduce){.live:before{animation:none}}
 h1{font-size:22px;margin:8px 0 0;letter-spacing:-.015em}
+.sub a{color:inherit;text-decoration:underline}
 .sub{color:var(--mute);font-size:12px;margin-top:2px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
 .stats{border:1px solid var(--line);display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin:14px 0 4px;background:var(--board);border-radius:14px;padding:10px 4px;position:relative;overflow:hidden}
 .stats:before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(90deg,rgba(255,255,255,.03) 0 28px,transparent 28px 56px);pointer-events:none}
@@ -102,6 +103,7 @@ function render(){
  document.querySelectorAll('#tabs button').forEach(b=>b.onclick=()=>{tab=b.dataset.t;location.hash=tab;render();window.scrollTo(0,0)});}
 fetch('data/board.json',{cache:'no-cache'}).then(r=>r.json()).then(d=>{D=d;NEED=d.needs_me||[];BUILD=d.building||[];GROUPS=d.group_order||[];ORDER=(d.statuses||[]).filter(s=>d.counts[s]);document.title=d.title;document.querySelector('h1').textContent=d.title;
  document.getElementById('gen').textContent='Updated '+ago(d.generated)+' · refreshes every 30 min';
+ const lc=d.last_closed;if(lc)document.getElementById('gen').insertAdjacentHTML('afterend',`<div class="sub" id="lc">Last closed: <a href="${esc(lc.url)}">#${lc.number}</a> · ${new Date(lc.closed).toLocaleString([], {month:'short',day:'numeric',hour:'numeric',minute:'2-digit'})} (${ago(lc.closed)})</div>`);
  const c=d.counts||{};const sum=a=>a.reduce((t,k)=>t+(c[k]||0),0);const rest=ORDER.filter(s=>!NEED.includes(s)&&!BUILD.includes(s)).slice(-2).reverse();
  document.getElementById('stats').innerHTML=[['In dev',c.Dev||0],['Ready',c.Ready||0],['Grooming',c.Grooming||0],['Defined',c.Defined||0]].map(([n,x])=>`<div class="stat"><b>${x}</b><span>${n}</span></div>`).join('');
  document.getElementById('foot').innerHTML=`${d.hidden_tasks} finished tasks hidden. <a href="${esc(d.project_url)}">Open the GitHub board</a>`;
