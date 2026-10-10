@@ -94,7 +94,7 @@ function render(){
  let h='';
  if(tab==='need')h=list(v.need,'Nothing is waiting on you.');
  else if(tab==='sprint'){const g=(n,a,cap)=>`<div class="grp"><span>${n}</span><span>${a.length}</span></div>`+(cap?`<div class="cap">${cap}</div>`:'');
-  h=(D.recent_done&&D.recent_done.length?g('Last done',D.recent_done)+D.recent_done.map(x=>`<a class="item" href="${esc(x.url)}"><div class="row"><div><div class="t">${esc(x.title)}</div><div class="s">${new Date(x.closed).toLocaleString([], {month:'short',day:'numeric',hour:'numeric',minute:'2-digit'})} (${ago(x.closed)})</div></div><div class="num">#${x.number}</div></div></a>`).join(''):'')+g('In flight',v.dev)+list(v.dev,'Nothing in Dev right now.')+g('Up next',v.ready)+list(v.ready,'Nothing groomed and ready.');
+  h=(D.recent_done&&D.recent_done.length?g('Last done',D.recent_done)+D.recent_done.map(x=>`<a class="item" href="${esc(x.url)}"><div class="row"><div><div class="t">${esc(x.title)}</div><div class="s">${new Date(x.closed).toLocaleString([], {month:'short',day:'numeric',hour:'numeric',minute:'2-digit'})} (${ago(x.closed)})</div></div><div class="num">#${x.number}</div></div></a>`).join(''):'')+g('In flight',v.dev)+list(v.dev,'Nothing in Dev right now.')+g('Up next',v.ready,'Taken top to bottom: the first one is next.')+list(v.ready,'Nothing groomed and ready.');
   if(v.need.length)h+=g('Waiting on review',v.need,'')+v.need.map(item).join('');
   if(v.now.length)h+=g('Now: epic progress',v.now)+v.now.map(item).join('');}
  else if(tab==='epics'){let last;for(const e of v.epics){const g=e.group||'No group';if(g!==last){h+=`<div class="grp"><span>${g}</span></div>`;last=g}h+=item(e)}}
