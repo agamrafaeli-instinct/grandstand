@@ -44,6 +44,8 @@ Everything needed is in this repo, no UI steps beyond the secret. With `gh` auth
 
 ## Config (`board.config.json`)
 
+If the config is wrong, the bake stops with a plain message that starts with `Config error:` (missing owner or project, a project number that is not a number, a field name or status name that the project does not have). The page keeps showing the last good data until the config is fixed. The message is in the refresh run log.
+
 | Key | Meaning |
 |---|---|
 | `title` | Page title. |
