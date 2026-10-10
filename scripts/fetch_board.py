@@ -2,7 +2,13 @@
 """Read a GitHub Projects v2 board and bake it into data/board.json. Read-only.
 Config: board.config.json (see README). Needs GH_TOKEN (or BOARD_TOKEN) with read access to the project."""
 import json, os, subprocess, sys, datetime
-cfg = json.load(open(os.environ.get('BOARD_CONFIG', 'board.config.json')))
+CFG = os.environ.get('BOARD_CONFIG', 'board.config.json')
+try: cfg = json.load(open(CFG))
+except FileNotFoundError: sys.exit('Config error: %s not found. Copy board.config.json from the README and set owner and project.' % CFG)
+except ValueError as e: sys.exit('Config error: %s is not valid JSON (%s).' % (CFG, e))
+for k in ('owner', 'project'):
+    if not cfg.get(k): sys.exit('Config error: "%s" is missing in %s.' % (k, CFG))
+if not str(cfg['project']).isdigit(): sys.exit('Config error: "project" must be the project number, for example 1. Got %r.' % cfg['project'])
 OWNER = cfg['owner']; NUM = int(cfg['project']); KIND = 'organization' if cfg.get('ownerType', 'user') == 'org' or cfg.get('ownerType') == 'organization' else 'user'
 SF = cfg.get('statusField', 'Status'); GF = cfg.get('groupField'); EL = cfg.get('epicLabel', 'epic')
 EF = cfg.get('estimateField')
@@ -10,6 +16,7 @@ HIDE = set(cfg.get('hideStatuses', ['Done']))
 est = ('es:fieldValueByName(name:"%s"){... on ProjectV2ItemFieldNumberValue{number}}' % EF) if EF else ''
 grp = ('gr:fieldValueByName(name:"%s"){... on ProjectV2ItemFieldSingleSelectValue{name}}' % GF) if GF else ''
 Q = '''query($a:String){%s(login:"%s"){projectV2(number:%d){title url
+ fields(first:60){nodes{... on ProjectV2FieldCommon{name}}}
  field(name:"%s"){... on ProjectV2SingleSelectField{options{name}}}
  items(first:100,after:$a){pageInfo{hasNextPage endCursor} nodes{
  st:fieldValueByName(name:"%s"){... on ProjectV2ItemFieldSingleSelectValue{name}} %s %s
@@ -20,6 +27,7 @@ def gql(after):
     cmd = ['gh', 'api', 'graphql', '-f', 'query=' + Q] + (['-f', 'a=' + after] if after else [])
     env = dict(os.environ); env['GH_TOKEN'] = os.environ.get('BOARD_TOKEN') or os.environ.get('GH_TOKEN', '')
     r = subprocess.run(cmd, capture_output=True, text=True, env=env)
+    if r.returncode and 'Could not resolve' in r.stderr: sys.exit('Config error: a field name in the config does not exist on project %s (statusField "%s", groupField "%s", estimateField "%s"). GitHub said: %s' % (NUM, SF, GF, EF, r.stderr.strip()[:160]))
     if r.returncode: sys.exit('GitHub API call failed: ' + r.stderr.strip()[:300])
     d = json.loads(r.stdout)
     if not d.get('data') or not d['data'].get(KIND) or not d['data'][KIND].get('projectV2'): sys.exit('Project not found or token cannot read it: ' + r.stdout[:300])
@@ -38,7 +46,15 @@ while True:
             closed=c.get('closedAt'), reason=c.get('stateReason'), total=sub.get('total', 0), done=sub.get('completed', 0), updated=c.get('updatedAt'), labels=labels))
     if not p['items']['pageInfo']['hasNextPage']: break
     after = p['items']['pageInfo']['endCursor']
+FN = [f['name'] for f in (proj.get('fields') or {}).get('nodes', []) if f]
+for key in ('statusField', 'groupField', 'estimateField'):
+    v = cfg.get(key) or ('Status' if key == 'statusField' else None)
+    if v and FN and v not in FN: sys.exit('Config error: "%s" is "%s" but project %s has these fields: %s.' % (key, v, NUM, ', '.join(FN)))
 order = [o['name'] for o in ((proj.get('field') or {}).get('options') or [])]
+if not order: sys.exit('Config error: field "%s" has no options. It must be a single select field.' % SF)
+for key in ('hideStatuses', 'needsMe', 'building'):
+    bad = [x for x in cfg.get(key, []) if x not in order]
+    if bad: sys.exit('Config error: "%s" lists %s, but the %s options are: %s.' % (key, ', '.join(bad), SF, ', '.join(order)))
 hidden = [i for i in items if i['status'] in HIDE or i['state'] in ('CLOSED', 'MERGED')]
 live = [i for i in items if i not in hidden]
 done = sorted([i for i in hidden if i.get('closed') and i.get('reason') != 'NOT_PLANNED' and not i['epic'] and i['status'] in HIDE], key=lambda i: i['closed'])
