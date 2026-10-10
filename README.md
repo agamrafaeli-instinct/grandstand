@@ -66,3 +66,11 @@ Everything needed is in this repo, no UI steps beyond the secret. With `gh` auth
 ## Status
 
 Early, built in public. Issues and pull requests are welcome. Licence: MIT.
+
+## Set up a new board (worked example: agamrafaeli-instinct/grandstand-board)
+1. Create a GitHub Project with a single-select Status field. The names are yours (the example uses Defined, Ready, Dev, Done).
+2. Make a new repo for the instance. It holds only `board.config.json` and one workflow. No code is copied.
+3. In `board.config.json` set `owner`, `ownerType`, `project` (the number), `statusField`, `hideStatuses`, `needsMe`, `building`, `tiles` (label and status per stat tile) and, for the pulse, `workRepo` plus `workRunName` (a substring of the workflow name to watch, or null to use the Dev ticket only).
+4. Copy `.github/workflows/refresh.yml` from the example repo. It checks out this repo as `tool/`, runs `python3 tool/scripts/fetch_board.py`, then publishes `tool/index.html` with `data/board.json`.
+5. Add a repo secret `BOARD_TOKEN`: a token that can read the project and the watched repo's Actions.
+6. Turn on Pages with the "GitHub Actions" source, then run the workflow once.
