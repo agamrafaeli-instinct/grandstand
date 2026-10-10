@@ -1,8 +1,19 @@
-# Lookout
+# Grandstand
 
-**An eyes-only progress board for your GitHub project, built for your phone.** Point it at a GitHub Projects (v2) board and get a static page that shows what needs you, what is being built, every epic with its progress, and the whole pipeline. It reads. It never writes.
+### Watch your coding agent work.
 
-Made so a coding agent can show a developer how the work is going, without a login, a server or a database. Live demo (the board of the Hacker News explorer project): https://agamrafaeli-instinct.github.io/hn-board/
+Your agent is building. You are on your phone. **Grandstand** is the front-row seat: a clean, read-only page that shows what needs you, what is being built and how far each epic has come, straight from your GitHub project board. No login, no server, no new tool to learn.
+
+**Live demo** (the board of a real project, refreshed every 30 minutes): https://agamrafaeli-instinct.github.io/grandstand/
+
+- Free: runs on GitHub Actions and GitHub Pages.
+- Read-only: it can look, it cannot touch your board.
+- Phone first: one column, light and dark, no sideways scroll.
+- Agent friendly: a coding agent can set it up in one pass from `AGENTS.md`.
+
+**Grandstand is an eyes-only progress board for your GitHub project, built for your phone.** Point it at a GitHub Projects (v2) board and get a static page that shows what needs you, what is being built, every epic with its progress, and the whole pipeline. It reads. It never writes.
+
+Made so a coding agent can show a developer how the work is going, without a login, a server or a database. The demo shows the board of the Hacker News explorer project.
 
 ## What you get
 

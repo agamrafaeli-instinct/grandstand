@@ -1,6 +1,6 @@
-# Notes for coding agents
+# Grandstand: notes for coding agents
 
-Goal: deploy a read-only progress board for the developer's GitHub Projects v2 board.
+Goal: deploy Grandstand, a read-only progress board for the developer's GitHub Projects v2 board.
 
 1. Create a repo from this template (public if the developer wants free Pages).
 2. Write `board.config.json`. Find the project number and status names with `gh api graphql` (query `projectV2(number:N){field(name:"Status"){... on ProjectV2SingleSelectField{options{name}}}}`). Put the statuses that need the human in `needsMe` and the in-progress ones in `building`.
