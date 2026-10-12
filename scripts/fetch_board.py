@@ -36,7 +36,11 @@ Q = Q.replace(' field(name', hopt + '\n field(name', 1)
 def gql(after):
     cmd = ['gh', 'api', 'graphql', '-f', 'query=' + Q] + (['-f', 'a=' + after] if after else [])
     env = dict(os.environ); env['GH_TOKEN'] = os.environ.get('BOARD_TOKEN') or os.environ.get('GH_TOKEN', '')
-    r = subprocess.run(cmd, capture_output=True, text=True, env=env)
+    import time
+    for _try in range(5):
+        r = subprocess.run(cmd, capture_output=True, text=True, env=env)
+        if r.returncode == 0 or not any(c in r.stderr for c in ('HTTP 502', 'HTTP 503', 'HTTP 504', 'timeout', 'timed out', 'rate limit')): break
+        time.sleep(3 * (_try + 1))
     if r.returncode and 'Could not resolve' in r.stderr: sys.exit('Config error: a field name in the config does not exist on project %s (statusField "%s", groupField "%s", estimateField "%s"). GitHub said: %s' % (NUM, SF, GF, EF, r.stderr.strip()[:160]))
     if r.returncode: sys.exit('GitHub API call failed: ' + r.stderr.strip()[:300])
     d = json.loads(r.stdout)
