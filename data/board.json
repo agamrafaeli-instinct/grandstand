@@ -1,5 +1,5 @@
 {
- "generated": "2026-10-10T14:00:04Z",
+ "generated": "2026-10-14T15:12:44Z",
  "title": "HN explorer board",
  "project": "HN explorer roadmap",
  "project_url": "https://github.com/users/agamrafaeli-instinct/projects/1",
@@ -17,6 +17,12 @@
   "Next",
   "Later"
  ],
+ "huddles": [
+  "Storytelling",
+  "Deep history",
+  "Trust",
+  "Reach"
+ ],
  "needs_me": [
   "Needs decision",
   "QA"
@@ -26,357 +32,92 @@
   "Dev"
  ],
  "group_field": "Horizon",
- "hidden_count": 90,
- "hidden_tasks": 85,
+ "hidden_count": 409,
+ "hidden_tasks": 377,
  "counts": {
-  "Grooming": 14,
-  "Defined": 7,
-  "Ready": 4,
+  "Grooming": 2,
   "Dev": 1
  },
+ "tiles": null,
  "last_closed": {
-  "number": 157,
-  "title": "Film cards: Curious round 2 (15 cards, h339-h353)",
-  "url": "https://github.com/agamrafaeli-instinct/hn-1m-explorer/issues/157",
-  "closed": "2026-10-10T13:58:28Z"
+  "number": 478,
+  "title": "Home: keep reading place after evidence",
+  "url": "https://github.com/agamrafaeli-instinct/hn-explorer/issues/478",
+  "closed": "2026-10-14T15:10:52Z"
  },
  "recent_done": [
   {
-   "number": 157,
-   "title": "Film cards: Curious round 2 (15 cards, h339-h353)",
-   "url": "https://github.com/agamrafaeli-instinct/hn-1m-explorer/issues/157",
-   "closed": "2026-10-10T13:58:28Z"
+   "number": 478,
+   "title": "Home: keep reading place after evidence",
+   "url": "https://github.com/agamrafaeli-instinct/hn-explorer/issues/478",
+   "closed": "2026-10-14T15:10:52Z"
   },
   {
-   "number": 156,
-   "title": "Film cards: VC (14 cards, h319-h332)",
-   "url": "https://github.com/agamrafaeli-instinct/hn-1m-explorer/issues/156",
-   "closed": "2026-10-10T13:13:52Z"
+   "number": 477,
+   "title": "Home: build share previews for essay beats",
+   "url": "https://github.com/agamrafaeli-instinct/hn-explorer/issues/477",
+   "closed": "2026-10-14T15:10:50Z"
   },
   {
-   "number": 155,
-   "title": "Film cards: Engineers (19 cards, h300-h318)",
-   "url": "https://github.com/agamrafaeli-instinct/hn-1m-explorer/issues/155",
-   "closed": "2026-10-10T13:04:46Z"
+   "number": 476,
+   "title": "Home: share the selected essay beat",
+   "url": "https://github.com/agamrafaeli-instinct/hn-explorer/issues/476",
+   "closed": "2026-10-14T15:10:48Z"
   },
   {
-   "number": 154,
-   "title": "Film foundation: shared builder, monthly shares, pooled base",
-   "url": "https://github.com/agamrafaeli-instinct/hn-1m-explorer/issues/154",
-   "closed": "2026-10-10T12:49:08Z"
+   "number": 475,
+   "title": "Home: show a shelf of existing stories",
+   "url": "https://github.com/agamrafaeli-instinct/hn-explorer/issues/475",
+   "closed": "2026-10-14T14:40:09Z"
   },
   {
-   "number": 152,
-   "title": "All-time pilot: five terms, old window against all-time",
-   "url": "https://github.com/agamrafaeli-instinct/hn-1m-explorer/issues/152",
-   "closed": "2026-10-10T11:46:00Z"
+   "number": 474,
+   "title": "Home: offer a short reading map",
+   "url": "https://github.com/agamrafaeli-instinct/hn-explorer/issues/474",
+   "closed": "2026-10-14T14:40:07Z"
   },
   {
-   "number": 129,
-   "title": "Render story layout and chart annotations",
-   "url": "https://github.com/agamrafaeli-instinct/hn-1m-explorer/issues/129",
-   "closed": "2026-10-10T11:06:33Z"
+   "number": 472,
+   "title": "Baseline: recover from unavailable period-control source",
+   "url": "https://github.com/agamrafaeli-instinct/hn-explorer/issues/472",
+   "closed": "2026-10-14T14:15:47Z"
   }
  ],
  "working": {
-  "name": "Daily Hacker News update and Pages",
-  "url": "https://github.com/agamrafaeli-instinct/hn-1m-explorer/actions/runs/38057477775",
-  "started": "2026-10-10T13:53:39Z",
+  "name": "Daily HN 300+ points digest",
+  "url": "https://github.com/agamrafaeli-instinct/hn-explorer/actions/runs/38586690517",
+  "started": "2026-10-14T15:08:21Z",
   "status": "completed"
  },
  "items": [
   {
-   "number": 63,
-   "title": "[Epic] - Tally - Running hypothesis scoreboard with verdict flips",
-   "url": "https://github.com/agamrafaeli-instinct/hn-1m-explorer/issues/63",
-   "state": "OPEN",
-   "status": "Grooming",
-   "group": "Now",
-   "estimate": null,
-   "epic": true,
-   "parent": null,
-   "closed": null,
-   "reason": null,
-   "total": 2,
-   "done": 2,
-   "updated": "2026-10-09T11:55:23Z",
-   "labels": [
-    "epic"
-   ]
-  },
-  {
-   "number": 64,
-   "title": "[Epic] - Headliner - Weekly narrative findings, magazine style",
-   "url": "https://github.com/agamrafaeli-instinct/hn-1m-explorer/issues/64",
-   "state": "OPEN",
-   "status": "Defined",
-   "group": "Next",
-   "estimate": null,
-   "epic": true,
-   "parent": null,
-   "closed": null,
-   "reason": null,
-   "total": 1,
-   "done": 1,
-   "updated": "2026-10-09T11:55:24Z",
-   "labels": [
-    "epic"
-   ]
-  },
-  {
-   "number": 66,
-   "title": "[Epic] - Ripple - Easy sharing of weeks and cards",
-   "url": "https://github.com/agamrafaeli-instinct/hn-1m-explorer/issues/66",
-   "state": "OPEN",
-   "status": "Grooming",
-   "group": "Next",
-   "estimate": null,
-   "epic": true,
-   "parent": null,
-   "closed": null,
-   "reason": null,
-   "total": 1,
-   "done": 1,
-   "updated": "2026-10-09T11:55:27Z",
-   "labels": [
-    "epic"
-   ]
-  },
-  {
-   "number": 68,
-   "title": "[Epic] - Spyglass - Owner-chosen names and terms to track",
-   "url": "https://github.com/agamrafaeli-instinct/hn-1m-explorer/issues/68",
-   "state": "OPEN",
-   "status": "Grooming",
-   "group": "Later",
-   "estimate": null,
-   "epic": true,
-   "parent": null,
-   "closed": null,
-   "reason": null,
-   "total": 2,
-   "done": 2,
-   "updated": "2026-10-09T11:55:29Z",
-   "labels": [
-    "epic"
-   ]
-  },
-  {
-   "number": 69,
-   "title": "[Epic] - Velvet - Accessible, comfortable phone layouts everywhere",
-   "url": "https://github.com/agamrafaeli-instinct/hn-1m-explorer/issues/69",
-   "state": "OPEN",
-   "status": "Grooming",
-   "group": "Later",
-   "estimate": null,
-   "epic": true,
-   "parent": null,
-   "closed": null,
-   "reason": null,
-   "total": 5,
-   "done": 5,
-   "updated": "2026-10-09T11:55:30Z",
-   "labels": [
-    "epic"
-   ]
-  },
-  {
-   "number": 70,
-   "title": "[Epic] - Compass - Follow any question through the data",
-   "url": "https://github.com/agamrafaeli-instinct/hn-1m-explorer/issues/70",
-   "state": "OPEN",
-   "status": "Defined",
-   "group": "Next",
-   "estimate": null,
-   "epic": true,
-   "parent": null,
-   "closed": null,
-   "reason": null,
-   "total": 1,
-   "done": 1,
-   "updated": "2026-10-09T11:55:31Z",
-   "labels": [
-    "epic"
-   ]
-  },
-  {
-   "number": 71,
-   "title": "[Epic] - Open Door - Easy, safe outside hypothesis cards",
-   "url": "https://github.com/agamrafaeli-instinct/hn-1m-explorer/issues/71",
-   "state": "OPEN",
-   "status": "Defined",
-   "group": "Later",
-   "estimate": null,
-   "epic": true,
-   "parent": null,
-   "closed": null,
-   "reason": null,
-   "total": 2,
-   "done": 2,
-   "updated": "2026-10-09T11:55:31Z",
-   "labels": [
-    "epic"
-   ]
-  },
-  {
-   "number": 72,
-   "title": "[Epic] - Toolbox - Runbooks so anyone can operate it",
-   "url": "https://github.com/agamrafaeli-instinct/hn-1m-explorer/issues/72",
-   "state": "OPEN",
-   "status": "Grooming",
-   "group": "Later",
-   "estimate": null,
-   "epic": true,
-   "parent": null,
-   "closed": null,
-   "reason": null,
-   "total": 3,
-   "done": 3,
-   "updated": "2026-10-09T11:55:32Z",
-   "labels": [
-    "epic"
-   ]
-  },
-  {
-   "number": 86,
-   "title": "[Epic] - Lens - Pages for one site or name",
-   "url": "https://github.com/agamrafaeli-instinct/hn-1m-explorer/issues/86",
-   "state": "OPEN",
-   "status": "Defined",
-   "group": "Next",
-   "estimate": null,
-   "epic": true,
-   "parent": null,
-   "closed": null,
-   "reason": null,
-   "total": 1,
-   "done": 1,
-   "updated": "2026-10-09T11:59:51Z",
-   "labels": [
-    "epic"
-   ]
-  },
-  {
-   "number": 87,
-   "title": "[Epic] - Harbor - Keep saved weeks safe and portable",
-   "url": "https://github.com/agamrafaeli-instinct/hn-1m-explorer/issues/87",
-   "state": "OPEN",
-   "status": "Defined",
-   "group": "Next",
-   "estimate": null,
-   "epic": true,
-   "parent": null,
-   "closed": null,
-   "reason": null,
-   "total": 2,
-   "done": 2,
-   "updated": "2026-10-09T11:59:53Z",
-   "labels": [
-    "epic"
-   ]
-  },
-  {
    "number": 109,
    "title": "[Epic] - Atlas - Cover all of HN since 2006",
-   "url": "https://github.com/agamrafaeli-instinct/hn-1m-explorer/issues/109",
+   "url": "https://github.com/agamrafaeli-instinct/hn-explorer/issues/109",
    "state": "OPEN",
    "status": "Grooming",
    "group": "Now",
+   "huddle": "Deep history",
    "estimate": null,
    "epic": true,
    "parent": null,
    "closed": null,
    "reason": null,
-   "total": 17,
-   "done": 12,
-   "updated": "2026-10-10T07:29:18Z",
+   "total": 29,
+   "done": 28,
+   "updated": "2026-10-11T16:50:08Z",
    "labels": [
     "epic"
-   ]
-  },
-  {
-   "number": 118,
-   "title": "Slice 6: daily run appends leaving items to the archive",
-   "url": "https://github.com/agamrafaeli-instinct/hn-1m-explorer/issues/118",
-   "state": "OPEN",
-   "status": "Grooming",
-   "group": null,
-   "estimate": 2.0,
-   "epic": false,
-   "parent": 109,
-   "closed": null,
-   "reason": null,
-   "total": 0,
-   "done": 0,
-   "updated": "2026-10-09T13:29:55Z",
-   "labels": [
-    "task"
-   ]
-  },
-  {
-   "number": 119,
-   "title": "Slice 7c: Explorer full archive mode over story files",
-   "url": "https://github.com/agamrafaeli-instinct/hn-1m-explorer/issues/119",
-   "state": "OPEN",
-   "status": "Grooming",
-   "group": null,
-   "estimate": 4.0,
-   "epic": false,
-   "parent": 109,
-   "closed": null,
-   "reason": null,
-   "total": 0,
-   "done": 0,
-   "updated": "2026-10-09T13:38:05Z",
-   "labels": [
-    "task"
-   ]
-  },
-  {
-   "number": 120,
-   "title": "Slice 8: reword to \"since 2006\"",
-   "url": "https://github.com/agamrafaeli-instinct/hn-1m-explorer/issues/120",
-   "state": "OPEN",
-   "status": "Ready",
-   "group": null,
-   "estimate": 0.75,
-   "epic": false,
-   "parent": 109,
-   "closed": null,
-   "reason": null,
-   "total": 0,
-   "done": 0,
-   "updated": "2026-10-09T13:30:04Z",
-   "labels": [
-    "task"
-   ]
-  },
-  {
-   "number": 121,
-   "title": "Slice 7a: precomputed aggregates for all years",
-   "url": "https://github.com/agamrafaeli-instinct/hn-1m-explorer/issues/121",
-   "state": "OPEN",
-   "status": "Grooming",
-   "group": null,
-   "estimate": 4.0,
-   "epic": false,
-   "parent": 109,
-   "closed": null,
-   "reason": null,
-   "total": 0,
-   "done": 0,
-   "updated": "2026-10-09T13:33:42Z",
-   "labels": [
-    "task"
    ]
   },
   {
    "number": 123,
    "title": "Decision: allow a third-party host for story files",
-   "url": "https://github.com/agamrafaeli-instinct/hn-1m-explorer/issues/123",
+   "url": "https://github.com/agamrafaeli-instinct/hn-explorer/issues/123",
    "state": "OPEN",
    "status": "Grooming",
    "group": null,
+   "huddle": null,
    "estimate": 0.75,
    "epic": false,
    "parent": 109,
@@ -390,193 +131,23 @@
    ]
   },
   {
-   "number": 125,
-   "title": "[Epic] - Throughline - Make every card tell a clear story",
-   "url": "https://github.com/agamrafaeli-instinct/hn-1m-explorer/issues/125",
-   "state": "OPEN",
-   "status": "Grooming",
-   "group": "Now",
-   "estimate": null,
-   "epic": true,
-   "parent": null,
-   "closed": null,
-   "reason": null,
-   "total": 7,
-   "done": 4,
-   "updated": "2026-10-10T07:28:10Z",
-   "labels": [
-    "epic"
-   ]
-  },
-  {
-   "number": 130,
-   "title": "Show historical context beside the test, not inside it",
-   "url": "https://github.com/agamrafaeli-instinct/hn-1m-explorer/issues/130",
-   "state": "OPEN",
-   "status": "Ready",
-   "group": null,
-   "estimate": 2.0,
-   "epic": false,
-   "parent": 125,
-   "closed": null,
-   "reason": null,
-   "total": 0,
-   "done": 0,
-   "updated": "2026-10-09T14:06:18Z",
-   "labels": [
-    "feature"
-   ]
-  },
-  {
-   "number": 131,
-   "title": "Roll out stories to the remaining 74 cards",
-   "url": "https://github.com/agamrafaeli-instinct/hn-1m-explorer/issues/131",
-   "state": "OPEN",
-   "status": "Ready",
-   "group": null,
-   "estimate": 4.0,
-   "epic": false,
-   "parent": 125,
-   "closed": null,
-   "reason": null,
-   "total": 0,
-   "done": 0,
-   "updated": "2026-10-09T14:06:23Z",
-   "labels": [
-    "task"
-   ]
-  },
-  {
-   "number": 132,
-   "title": "QA: Throughline stories and layout",
-   "url": "https://github.com/agamrafaeli-instinct/hn-1m-explorer/issues/132",
-   "state": "OPEN",
-   "status": "Grooming",
-   "group": null,
-   "estimate": 2.0,
-   "epic": false,
-   "parent": 125,
-   "closed": null,
-   "reason": null,
-   "total": 0,
-   "done": 0,
-   "updated": "2026-10-09T14:06:27Z",
-   "labels": [
-    "task"
-   ]
-  },
-  {
-   "number": 133,
-   "title": "[Epic] - Honor - Score every hypothesis card for quality",
-   "url": "https://github.com/agamrafaeli-instinct/hn-1m-explorer/issues/133",
-   "state": "OPEN",
-   "status": "Grooming",
-   "group": "Now",
-   "estimate": null,
-   "epic": true,
-   "parent": null,
-   "closed": null,
-   "reason": null,
-   "total": 11,
-   "done": 11,
-   "updated": "2026-10-10T07:29:19Z",
-   "labels": [
-    "epic"
-   ]
-  },
-  {
-   "number": 153,
-   "title": "[Epic] - Film cards - All-time windows for cards",
-   "url": "https://github.com/agamrafaeli-instinct/hn-1m-explorer/issues/153",
-   "state": "OPEN",
-   "status": "Grooming",
-   "group": null,
-   "estimate": null,
-   "epic": true,
-   "parent": null,
-   "closed": null,
-   "reason": null,
-   "total": 7,
-   "done": 5,
-   "updated": "2026-10-10T12:40:44Z",
-   "labels": [
-    "epic"
-   ]
-  },
-  {
-   "number": 158,
-   "title": "Film cards: Geeks (15 cards replace the rolling cards)",
-   "url": "https://github.com/agamrafaeli-instinct/hn-1m-explorer/issues/158",
+   "number": 480,
+   "title": "Rename the explorer repo and update published links",
+   "url": "https://github.com/agamrafaeli-instinct/hn-explorer/issues/480",
    "state": "OPEN",
    "status": "Dev",
    "group": null,
-   "estimate": 4.0,
-   "epic": false,
-   "parent": 153,
-   "closed": null,
-   "reason": null,
-   "total": 0,
-   "done": 0,
-   "updated": "2026-10-10T13:48:21Z",
-   "labels": [
-    "task"
-   ]
-  },
-  {
-   "number": 159,
-   "title": "SCOREBOARD.md text for all-time windows (proposal)",
-   "url": "https://github.com/agamrafaeli-instinct/hn-1m-explorer/issues/159",
-   "state": "OPEN",
-   "status": "Defined",
-   "group": null,
-   "estimate": 0.75,
-   "epic": false,
-   "parent": 153,
-   "closed": null,
-   "reason": null,
-   "total": 0,
-   "done": 0,
-   "updated": "2026-10-10T12:41:05Z",
-   "labels": [
-    "task"
-   ]
-  },
-  {
-   "number": 167,
-   "title": "[Epic] - Story finder - A new story each day",
-   "url": "https://github.com/agamrafaeli-instinct/hn-1m-explorer/issues/167",
-   "state": "OPEN",
-   "status": "Defined",
-   "group": null,
+   "huddle": null,
    "estimate": null,
-   "epic": true,
+   "epic": false,
    "parent": null,
    "closed": null,
    "reason": null,
    "total": 0,
    "done": 0,
-   "updated": "2026-10-10T13:10:28Z",
+   "updated": "2026-10-14T14:52:40Z",
    "labels": [
-    "epic"
-   ]
-  },
-  {
-   "number": 169,
-   "title": "[Epic] - Compare first: topic comparison home",
-   "url": "https://github.com/agamrafaeli-instinct/hn-1m-explorer/issues/169",
-   "state": "OPEN",
-   "status": "Ready",
-   "group": null,
-   "estimate": null,
-   "epic": true,
-   "parent": null,
-   "closed": null,
-   "reason": null,
-   "total": 0,
-   "done": 0,
-   "updated": "2026-10-10T13:38:56Z",
-   "labels": [
-    "epic"
+    "task"
    ]
   }
  ]

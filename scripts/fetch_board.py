@@ -78,7 +78,7 @@ recent_done = [{k: i[k] for k in ('number', 'title', 'url', 'closed')} for i in 
 working = None
 RUNNAME = cfg.get('workRunName', 'Daily')
 try:
-    repo = cfg.get('workRepo', 'hn-1m-explorer')
+    repo = cfg.get('workRepo', 'hn-explorer')
     runs = json.loads(subprocess.run(['gh', 'api', 'repos/%s/%s/actions/runs?per_page=10' % (OWNER, repo)], capture_output=True, text=True, check=True).stdout)['workflow_runs']
     now = datetime.datetime.now(datetime.timezone.utc)
     for r in runs:
