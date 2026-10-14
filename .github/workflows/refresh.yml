@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: github-pages
-      url: ${{ steps.deploy.outputs.page_url }}
+      url: ${{ steps.deploy.outputs.page_url || steps.deploy_retry.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
       - name: Bake the board into data/board.json
@@ -35,4 +35,12 @@ jobs:
         with:
           path: _site
       - id: deploy
+        uses: actions/deploy-pages@v4
+        continue-on-error: true
+      # Uploaded artifact metadata can take time to appear in GitHub's deploy API.
+      - name: Wait before the deploy retry
+        if: steps.deploy.outcome == 'failure'
+        run: sleep 30
+      - id: deploy_retry
+        if: steps.deploy.outcome == 'failure'
         uses: actions/deploy-pages@v4
